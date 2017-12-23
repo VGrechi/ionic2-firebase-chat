@@ -1,0 +1,17 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "users": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": [
+        "username",
+        "name"
+      ]
+    },
+    "chats": {
+      ".indexOn": "timestamp"
+    }
+  }
+}

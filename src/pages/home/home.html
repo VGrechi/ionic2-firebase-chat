@@ -1,14 +1,42 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
+  <custom-logged-header [title]="view"></custom-logged-header>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="view">
+      <ion-segment-button value="chats">Chats</ion-segment-button>
+      <ion-segment-button value="users">Users</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="filterItems($event)"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+
+  <div [ngSwitch]="view">
+
+    <ion-list *ngSwitchCase="'chats'" no-lines>
+      <button ion-item *ngFor="let chat of chats | async" (click)="onChatOpen(chat)">
+        <ion-avatar item-left>
+          <img [src]="chat.photo || 'assets/images/no-photo.jpg'">
+        </ion-avatar>
+        <h2>{{ chat.title }}</h2>
+        <p *ngIf="chat.lastMessage; else customMessage">{{ chat.timestamp | date:'dd/MM/yyyy   H:mm'}} - {{ chat.lastMessage }}</p>
+        <ng-template #customMessage>
+          <p>No messages</p>
+        </ng-template>
+      </button>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'users'" no-lines>
+        <button ion-item *ngFor="let user of users | async" (click)="onChatCreate(user)">
+            <ion-avatar item-left>
+                <img [src]="user.photo || 'assets/images/no-photo.jpg'">
+            </ion-avatar>
+            <h2>{{ user.name }}</h2>
+          </button>
+      </ion-list>
+
+  </div>
 </ion-content>
